@@ -4,10 +4,10 @@
 #include "../../MCAL/SYSTICK/SYSTICK_int.h"
 #include "SNAKE_int.h"
 
-#define SNAKE_BOARD_X       16
-#define SNAKE_BOARD_Y       30
-#define SNAKE_BOARD_COLS    12
-#define SNAKE_BOARD_ROWS    10
+#define SNAKE_BOARD_X       0
+#define SNAKE_BOARD_Y       0
+#define SNAKE_BOARD_COLS    16
+#define SNAKE_BOARD_ROWS    18
 #define SNAKE_CELL_SIZE     8
 #define SNAKE_MAX_LENGTH    (SNAKE_BOARD_COLS * SNAKE_BOARD_ROWS)
 #define SNAKE_MOVE_PERIOD_US 250000UL
@@ -155,7 +155,14 @@ static void SNAKE_vPlaceFood(void)
 static void SNAKE_vDrawBoard(void)
 {
     HTFT_vFillBackgroundColor(TFT_BLACK);
-    HTFT_vWriteString(49, 143, "SNAKE", TFT_CYAN, TFT_BLACK, 1);
+    HTFT_vWriteString(49, 148, "SNAKE", TFT_CYAN, TFT_BLACK, 1);
+
+    HTFT_vDrawHorizontalLine(
+        145,
+        SNAKE_BOARD_X,
+        127,
+        TFT_WHITE
+    );
 }
 
 static void SNAKE_vDrawRound(void)
