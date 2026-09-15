@@ -26,6 +26,7 @@ static volatile u8 G_u8Direction;
 static volatile u8 G_u8RequestedDirection;
 static volatile u8 G_u8ExitFlag;
 static u32 G_u32LastMoveTime;
+static u32 G_u32RandomState = 1;
 
 static void SNAKE_vDrawCell(u8 A_u8X, u8 A_u8Y, u16 A_u16Color);
 static void SNAKE_vDrawBoard(void);
@@ -34,6 +35,15 @@ static void SNAKE_vPlaceFood(void);
 static void SNAKE_vResetRound(void);
 static void SNAKE_vMove(void);
 static u8 SNAKE_u8IsSnakeCell(u8 A_u8X, u8 A_u8Y);
+static u32 SNAKE_u32GetRandom(void);
+
+void SNAKE_vSetRandomSeed(u32 A_u32Seed)
+{
+    if (A_u32Seed == 0)
+        A_u32Seed = 1;
+
+    G_u32RandomState = A_u32Seed;
+}
 
 void SNAKE_vHandleIRCommand(u8 A_u8Command)
 {
@@ -92,8 +102,20 @@ static u8 SNAKE_u8IsSnakeCell(u8 A_u8X, u8 A_u8Y)
     return 0;
 }
 
+static u32 SNAKE_u32GetRandom(void)
+{
+    G_u32RandomState ^= G_u32RandomState << 13;
+    G_u32RandomState ^= G_u32RandomState >> 17;
+    G_u32RandomState ^= G_u32RandomState << 5;
+
+    return G_u32RandomState;
+}
+
 static void SNAKE_vPlaceFood(void)
 {
+    u16 L_u16FreeCells = 0;
+    u16 L_u16SelectedFreeCell;
+    u16 L_u16FreeCellIndex = 0;
     u8 L_u8Y;
     u8 L_u8X;
 
@@ -102,10 +124,29 @@ static void SNAKE_vPlaceFood(void)
         for (L_u8X = 0; L_u8X < SNAKE_BOARD_COLS; L_u8X++)
         {
             if (!SNAKE_u8IsSnakeCell(L_u8X, L_u8Y))
+                L_u16FreeCells++;
+        }
+    }
+
+    if (L_u16FreeCells == 0)
+        return;
+
+    L_u16SelectedFreeCell = (u16)(SNAKE_u32GetRandom() % L_u16FreeCells);
+
+    for (L_u8Y = 0; L_u8Y < SNAKE_BOARD_ROWS; L_u8Y++)
+    {
+        for (L_u8X = 0; L_u8X < SNAKE_BOARD_COLS; L_u8X++)
+        {
+            if (!SNAKE_u8IsSnakeCell(L_u8X, L_u8Y))
             {
-                G_u8FoodX = L_u8X;
-                G_u8FoodY = L_u8Y;
-                return;
+                if (L_u16FreeCellIndex == L_u16SelectedFreeCell)
+                {
+                    G_u8FoodX = L_u8X;
+                    G_u8FoodY = L_u8Y;
+                    return;
+                }
+
+                L_u16FreeCellIndex++;
             }
         }
     }
@@ -115,16 +156,6 @@ static void SNAKE_vDrawBoard(void)
 {
     HTFT_vFillBackgroundColor(TFT_BLACK);
     HTFT_vWriteString(49, 143, "SNAKE", TFT_CYAN, TFT_BLACK, 1);
-    HTFT_vDrawGrid(
-        SNAKE_BOARD_X,
-        SNAKE_BOARD_X + (SNAKE_BOARD_COLS * SNAKE_CELL_SIZE),
-        SNAKE_BOARD_Y,
-        SNAKE_BOARD_Y + (SNAKE_BOARD_ROWS * SNAKE_CELL_SIZE),
-        TFT_WHITE,
-        TFT_BLACK,
-        SNAKE_BOARD_COLS,
-        SNAKE_BOARD_ROWS
-    );
 }
 
 static void SNAKE_vDrawRound(void)
@@ -146,15 +177,37 @@ static void SNAKE_vDrawRound(void)
 
 static void SNAKE_vResetRound(void)
 {
+    u8 L_u8Direction = (u8)(SNAKE_u32GetRandom() % 4);
+
     G_u8SnakeLength = 3;
-    G_u8SnakeX[0] = 6;
-    G_u8SnakeY[0] = 5;
-    G_u8SnakeX[1] = 5;
-    G_u8SnakeY[1] = 5;
-    G_u8SnakeX[2] = 4;
-    G_u8SnakeY[2] = 5;
-    G_u8Direction = SNAKE_DIR_RIGHT;
-    G_u8RequestedDirection = SNAKE_DIR_RIGHT;
+
+    if (L_u8Direction == SNAKE_DIR_UP)
+    {
+        G_u8SnakeX[0] = 6; G_u8SnakeY[0] = 5;
+        G_u8SnakeX[1] = 6; G_u8SnakeY[1] = 6;
+        G_u8SnakeX[2] = 6; G_u8SnakeY[2] = 7;
+    }
+    else if (L_u8Direction == SNAKE_DIR_RIGHT)
+    {
+        G_u8SnakeX[0] = 5; G_u8SnakeY[0] = 5;
+        G_u8SnakeX[1] = 4; G_u8SnakeY[1] = 5;
+        G_u8SnakeX[2] = 3; G_u8SnakeY[2] = 5;
+    }
+    else if (L_u8Direction == SNAKE_DIR_DOWN)
+    {
+        G_u8SnakeX[0] = 6; G_u8SnakeY[0] = 4;
+        G_u8SnakeX[1] = 6; G_u8SnakeY[1] = 3;
+        G_u8SnakeX[2] = 6; G_u8SnakeY[2] = 2;
+    }
+    else
+    {
+        G_u8SnakeX[0] = 7; G_u8SnakeY[0] = 5;
+        G_u8SnakeX[1] = 8; G_u8SnakeY[1] = 5;
+        G_u8SnakeX[2] = 9; G_u8SnakeY[2] = 5;
+    }
+
+    G_u8Direction = L_u8Direction;
+    G_u8RequestedDirection = L_u8Direction;
     SNAKE_vPlaceFood();
 }
 

@@ -2060,7 +2060,7 @@ END GROUP
                 0x20004c00                __Main_Stack_Limit = (__stack - __Main_Stack_Size)
                 [!provide]                PROVIDE (_Main_Stack_Limit, __Main_Stack_Limit)
                 0x00000100                _Minimum_Stack_Size = 0x100
-                0x2000030c                PROVIDE (_Heap_Begin, _end_noinit)
+                0x20000310                PROVIDE (_Heap_Begin, _end_noinit)
                 0x20004c00                PROVIDE (_Heap_Limit, (__stack - __Main_Stack_Size))
 
 .isr_vector     0x08000000      0x350
@@ -2174,16 +2174,16 @@ END GROUP
 
 .inits          0x08000350       0x28
                 0x08000350                __data_regions_array_start = .
-                0x08000350        0x4 LONG 0x8003490 LOADADDR (.data)
+                0x08000350        0x4 LONG 0x8003558 LOADADDR (.data)
                 0x08000354        0x4 LONG 0x20000000 ADDR (.data)
-                0x08000358        0x4 LONG 0x2000009c (ADDR (.data) + SIZEOF (.data))
-                0x0800035c        0x4 LONG 0x8003490 LOADADDR (.data_CCMRAM)
+                0x08000358        0x4 LONG 0x200000a0 (ADDR (.data) + SIZEOF (.data))
+                0x0800035c        0x4 LONG 0x8003558 LOADADDR (.data_CCMRAM)
                 0x08000360        0x4 LONG 0x0 ADDR (.data_CCMRAM)
                 0x08000364        0x4 LONG 0x0 (ADDR (.data_CCMRAM) + SIZEOF (.data_CCMRAM))
                 0x08000368                __data_regions_array_end = .
                 0x08000368                __bss_regions_array_start = .
-                0x08000368        0x4 LONG 0x2000009c ADDR (.bss)
-                0x0800036c        0x4 LONG 0x2000030c (ADDR (.bss) + SIZEOF (.bss))
+                0x08000368        0x4 LONG 0x200000a0 ADDR (.bss)
+                0x0800036c        0x4 LONG 0x20000310 (ADDR (.bss) + SIZEOF (.bss))
                 0x08000370        0x4 LONG 0x0 ADDR (.bss_CCMRAM)
                 0x08000374        0x4 LONG 0x0 (ADDR (.bss_CCMRAM) + SIZEOF (.bss_CCMRAM))
                 0x08000378                __bss_regions_array_end = .
@@ -2209,7 +2209,7 @@ END GROUP
 .flashtext
  *(.flashtext .flashtext.*)
 
-.text           0x08000378     0x3117
+.text           0x08000378     0x31df
  *(.text .text.*)
  .text._exit    0x08000378        0x2 ./system/src/newlib/_exit.o
                 0x08000378                _exit
@@ -2435,218 +2435,223 @@ END GROUP
                 0x08001748                TICTACTOE_vPlay
  .text.SNAKE_u8IsSnakeCell
                 0x08001884       0x34 ./src/APP/SNAKE/SNAKE_prg.o
+ .text.SNAKE_u32GetRandom
+                0x080018b8       0x18 ./src/APP/SNAKE/SNAKE_prg.o
  .text.SNAKE_vPlaceFood
-                0x080018b8       0x38 ./src/APP/SNAKE/SNAKE_prg.o
+                0x080018d0       0x84 ./src/APP/SNAKE/SNAKE_prg.o
  .text.SNAKE_vResetRound
-                0x080018f0       0x44 ./src/APP/SNAKE/SNAKE_prg.o
+                0x08001954       0x9c ./src/APP/SNAKE/SNAKE_prg.o
  .text.SNAKE_vDrawBoard
-                0x08001934       0x44 ./src/APP/SNAKE/SNAKE_prg.o
+                0x080019f0       0x2c ./src/APP/SNAKE/SNAKE_prg.o
  .text.SNAKE_vDrawCell
-                0x08001978       0x28 ./src/APP/SNAKE/SNAKE_prg.o
+                0x08001a1c       0x28 ./src/APP/SNAKE/SNAKE_prg.o
  .text.SNAKE_vDrawRound
-                0x080019a0       0x4c ./src/APP/SNAKE/SNAKE_prg.o
+                0x08001a44       0x4c ./src/APP/SNAKE/SNAKE_prg.o
  .text.SNAKE_vMove
-                0x080019ec      0x118 ./src/APP/SNAKE/SNAKE_prg.o
+                0x08001a90      0x118 ./src/APP/SNAKE/SNAKE_prg.o
+ .text.SNAKE_vSetRandomSeed
+                0x08001ba8       0x10 ./src/APP/SNAKE/SNAKE_prg.o
+                0x08001ba8                SNAKE_vSetRandomSeed
  .text.SNAKE_vHandleIRCommand
-                0x08001b04       0x74 ./src/APP/SNAKE/SNAKE_prg.o
-                0x08001b04                SNAKE_vHandleIRCommand
+                0x08001bb8       0x74 ./src/APP/SNAKE/SNAKE_prg.o
+                0x08001bb8                SNAKE_vHandleIRCommand
  .text.SNAKE_vInit
-                0x08001b78       0x24 ./src/APP/SNAKE/SNAKE_prg.o
-                0x08001b78                SNAKE_vInit
+                0x08001c2c       0x24 ./src/APP/SNAKE/SNAKE_prg.o
+                0x08001c2c                SNAKE_vInit
  .text.SNAKE_vPlay
-                0x08001b9c       0x38 ./src/APP/SNAKE/SNAKE_prg.o
-                0x08001b9c                SNAKE_vPlay
+                0x08001c50       0x38 ./src/APP/SNAKE/SNAKE_prg.o
+                0x08001c50                SNAKE_vPlay
  .text.GAME_vRenderSingleItem
-                0x08001bd4       0xb4 ./src/APP/GAME/GAME_prg.o
+                0x08001c88       0xb4 ./src/APP/GAME/GAME_prg.o
  .text.GAME_vNavigateDownISR
-                0x08001c88       0x40 ./src/APP/GAME/GAME_prg.o
-                0x08001c88                GAME_vNavigateDownISR
+                0x08001d3c       0x40 ./src/APP/GAME/GAME_prg.o
+                0x08001d3c                GAME_vNavigateDownISR
  .text.GAME_vNavigateUPISR
-                0x08001cc8       0x44 ./src/APP/GAME/GAME_prg.o
-                0x08001cc8                GAME_vNavigateUPISR
+                0x08001d7c       0x44 ./src/APP/GAME/GAME_prg.o
+                0x08001d7c                GAME_vNavigateUPISR
  .text.GAME_vSelectISR
-                0x08001d0c       0x1c ./src/APP/GAME/GAME_prg.o
-                0x08001d0c                GAME_vSelectISR
+                0x08001dc0       0x30 ./src/APP/GAME/GAME_prg.o
+                0x08001dc0                GAME_vSelectISR
  .text.GAME_vHandleIRCommand
-                0x08001d28       0x5c ./src/APP/GAME/GAME_prg.o
-                0x08001d28                GAME_vHandleIRCommand
+                0x08001df0       0x5c ./src/APP/GAME/GAME_prg.o
+                0x08001df0                GAME_vHandleIRCommand
  .text.GAME_vDrawMenu
-                0x08001d84       0x8c ./src/APP/GAME/GAME_prg.o
-                0x08001d84                GAME_vDrawMenu
+                0x08001e4c       0x8c ./src/APP/GAME/GAME_prg.o
+                0x08001e4c                GAME_vDrawMenu
  .text.GAME_vUpdateMenuSelection
-                0x08001e10       0x2c ./src/APP/GAME/GAME_prg.o
-                0x08001e10                GAME_vUpdateMenuSelection
+                0x08001ed8       0x2c ./src/APP/GAME/GAME_prg.o
+                0x08001ed8                GAME_vUpdateMenuSelection
  .text.GAME_vTaskHandler
-                0x08001e3c       0x88 ./src/APP/GAME/GAME_prg.o
-                0x08001e3c                GAME_vTaskHandler
+                0x08001f04       0x88 ./src/APP/GAME/GAME_prg.o
+                0x08001f04                GAME_vTaskHandler
  .text.ConnectFour_u8CheckWin
-                0x08001ec4      0x17c ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x08001f8c      0x17c ./src/APP/CONNECT4/CONNECT4_prg.o
  .text.ConnectFour_vDrawColumnCursor
-                0x08002040       0x2a ./src/APP/CONNECT4/CONNECT4_prg.o
- *fill*         0x0800206a        0x2 
+                0x08002108       0x2a ./src/APP/CONNECT4/CONNECT4_prg.o
+ *fill*         0x08002132        0x2 
  .text.ConnectFour_vUpdateCursor
-                0x0800206c       0x68 ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x08002134       0x68 ./src/APP/CONNECT4/CONNECT4_prg.o
  .text.CONNECT4_vBtnLeft_ISR
-                0x080020d4       0x18 ./src/APP/CONNECT4/CONNECT4_prg.o
-                0x080020d4                CONNECT4_vBtnLeft_ISR
+                0x0800219c       0x18 ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x0800219c                CONNECT4_vBtnLeft_ISR
  .text.CONNECT4_vBtnDrop_ISR
-                0x080020ec        0xc ./src/APP/CONNECT4/CONNECT4_prg.o
-                0x080020ec                CONNECT4_vBtnDrop_ISR
+                0x080021b4        0xc ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x080021b4                CONNECT4_vBtnDrop_ISR
  .text.CONNECT4_vBtnRight_ISR
-                0x080020f8       0x1c ./src/APP/CONNECT4/CONNECT4_prg.o
-                0x080020f8                CONNECT4_vBtnRight_ISR
+                0x080021c0       0x1c ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x080021c0                CONNECT4_vBtnRight_ISR
  .text.CONNECT4_vBtnExit_ISR
-                0x08002114        0xc ./src/APP/CONNECT4/CONNECT4_prg.o
-                0x08002114                CONNECT4_vBtnExit_ISR
+                0x080021dc        0xc ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x080021dc                CONNECT4_vBtnExit_ISR
  .text.CONNECT4_vHandleIRCommand
-                0x08002120       0x2c ./src/APP/CONNECT4/CONNECT4_prg.o
-                0x08002120                CONNECT4_vHandleIRCommand
+                0x080021e8       0x2c ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x080021e8                CONNECT4_vHandleIRCommand
  .text.CONNECT4_vInit
-                0x0800214c       0xa0 ./src/APP/CONNECT4/CONNECT4_prg.o
-                0x0800214c                CONNECT4_vInit
- *fill*         0x080021ec        0x4 
+                0x08002214       0xa0 ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x08002214                CONNECT4_vInit
+ *fill*         0x080022b4        0x4 
  .text.CONNECT4_vPlay
-                0x080021f0      0x154 ./src/APP/CONNECT4/CONNECT4_prg.o
-                0x080021f0                CONNECT4_vPlay
+                0x080022b8      0x154 ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x080022b8                CONNECT4_vPlay
  .text.IR_vCommandReceived
-                0x08002344        0xe ./src/APP/main.o
- *fill*         0x08002352        0x2 
- .text.main     0x08002354       0x90 ./src/APP/main.o
-                0x08002354                main
- .text          0x080023e4      0x424 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7-m\libgcc.a(_arm_muldivdf3.o)
-                0x080023e4                __aeabi_dmul
-                0x080023e4                __muldf3
-                0x08002638                __divdf3
-                0x08002638                __aeabi_ddiv
- .text          0x08002808       0x40 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7-m\libgcc.a(_arm_fixunsdfsi.o)
-                0x08002808                __aeabi_d2uiz
-                0x08002808                __fixunsdfsi
- .text.__errno  0x08002848        0xc c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-errno.o)
-                0x08002848                __errno
+                0x0800240c        0xe ./src/APP/main.o
+ *fill*         0x0800241a        0x2 
+ .text.main     0x0800241c       0x90 ./src/APP/main.o
+                0x0800241c                main
+ .text          0x080024ac      0x424 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7-m\libgcc.a(_arm_muldivdf3.o)
+                0x080024ac                __aeabi_dmul
+                0x080024ac                __muldf3
+                0x08002700                __divdf3
+                0x08002700                __aeabi_ddiv
+ .text          0x080028d0       0x40 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7-m\libgcc.a(_arm_fixunsdfsi.o)
+                0x080028d0                __aeabi_d2uiz
+                0x080028d0                __fixunsdfsi
+ .text.__errno  0x08002910        0xc c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-errno.o)
+                0x08002910                __errno
  .text._vsnprintf_r
-                0x08002854       0x58 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-vsnprintf.o)
-                0x08002854                _vsniprintf_r
-                0x08002854                _vsnprintf_r
+                0x0800291c       0x58 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-vsnprintf.o)
+                0x0800291c                _vsniprintf_r
+                0x0800291c                _vsnprintf_r
  .text.vsnprintf
-                0x080028ac       0x1c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-vsnprintf.o)
-                0x080028ac                vsniprintf
-                0x080028ac                vsnprintf
+                0x08002974       0x1c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-vsnprintf.o)
+                0x08002974                vsniprintf
+                0x08002974                vsnprintf
  .text.__ssputs_r
-                0x080028c8       0xb4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-svfprintf.o)
-                0x080028c8                __ssputs_r
+                0x08002990       0xb4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-svfprintf.o)
+                0x08002990                __ssputs_r
  .text._svfprintf_r
-                0x0800297c      0x1ec c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-svfprintf.o)
-                0x0800297c                _svfiprintf_r
-                0x0800297c                _svfprintf_r
+                0x08002a44      0x1ec c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-svfprintf.o)
+                0x08002a44                _svfiprintf_r
+                0x08002a44                _svfprintf_r
  .text._printf_common
-                0x08002b68       0xec c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x08002b68                _printf_common
+                0x08002c30       0xec c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08002c30                _printf_common
  .text._printf_i
-                0x08002c54      0x224 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x08002c54                _printf_i
- .text.memchr   0x08002e78       0x1c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memchr-stub.o)
-                0x08002e78                memchr
- .text.memcpy   0x08002e94       0x16 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memcpy-stub.o)
-                0x08002e94                memcpy
- .text.memmove  0x08002eaa       0x32 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memmove.o)
-                0x08002eaa                memmove
- .text._free_r  0x08002edc       0x98 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-freer.o)
-                0x08002edc                _free_r
+                0x08002d1c      0x224 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08002d1c                _printf_i
+ .text.memchr   0x08002f40       0x1c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memchr-stub.o)
+                0x08002f40                memchr
+ .text.memcpy   0x08002f5c       0x16 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memcpy-stub.o)
+                0x08002f5c                memcpy
+ .text.memmove  0x08002f72       0x32 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memmove.o)
+                0x08002f72                memmove
+ .text._free_r  0x08002fa4       0x98 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-freer.o)
+                0x08002fa4                _free_r
  .text._malloc_r
-                0x08002f74       0xb4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-mallocr.o)
-                0x08002f74                _malloc_r
+                0x0800303c       0xb4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-mallocr.o)
+                0x0800303c                _malloc_r
  .text._realloc_r
-                0x08003028       0x4c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-reallocr.o)
-                0x08003028                _realloc_r
- .text._sbrk_r  0x08003074       0x20 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-sbrkr.o)
-                0x08003074                _sbrk_r
+                0x080030f0       0x4c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-reallocr.o)
+                0x080030f0                _realloc_r
+ .text._sbrk_r  0x0800313c       0x20 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-sbrkr.o)
+                0x0800313c                _sbrk_r
  .text.__malloc_lock
-                0x08003094        0x2 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-mlock.o)
-                0x08003094                __malloc_lock
+                0x0800315c        0x2 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-mlock.o)
+                0x0800315c                __malloc_lock
  .text.__malloc_unlock
-                0x08003096        0x2 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-mlock.o)
-                0x08003096                __malloc_unlock
+                0x0800315e        0x2 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-mlock.o)
+                0x0800315e                __malloc_unlock
  .text._malloc_usable_size_r
-                0x08003098       0x10 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-msizer.o)
-                0x08003098                _malloc_usable_size_r
+                0x08003160       0x10 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-msizer.o)
+                0x08003160                _malloc_usable_size_r
  *(.rodata .rodata.* .constdata .constdata.*)
  .rodata.dumpExceptionStack.str1.4
-                0x080030a8      0x11a ./system/src/cortexm/exception_handlers.o
- *fill*         0x080031c2        0x2 
+                0x08003170      0x11a ./system/src/cortexm/exception_handlers.o
+ *fill*         0x0800328a        0x2 
  .rodata.str1.4
-                0x080031c4       0x2a ./system/src/cortexm/exception_handlers.o
- *fill*         0x080031ee        0x2 
+                0x0800328c       0x2a ./system/src/cortexm/exception_handlers.o
+ *fill*         0x080032b6        0x2 
  .rodata.Font5x7
-                0x080031f0      0x1d6 ./src/HAL/TFT/TFT_prg.o
- *fill*         0x080033c6        0x2 
+                0x080032b8      0x1d6 ./src/HAL/TFT/TFT_prg.o
+ *fill*         0x0800348e        0x2 
  .rodata.TICTACTOE_vDrawCell.str1.4
-                0x080033c8        0x6 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- *fill*         0x080033ce        0x2 
+                0x08003490        0x6 ./src/APP/TICTACTOE/TICTACTOE_prg.o
+ *fill*         0x08003496        0x2 
  .rodata.TICTACTOE_vInit.str1.4
-                0x080033d0        0xc ./src/APP/TICTACTOE/TICTACTOE_prg.o
+                0x08003498        0xc ./src/APP/TICTACTOE/TICTACTOE_prg.o
  .rodata.TICTACTOE_vPlay.str1.4
-                0x080033dc       0x15 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- *fill*         0x080033f1        0x3 
+                0x080034a4       0x15 ./src/APP/TICTACTOE/TICTACTOE_prg.o
+ *fill*         0x080034b9        0x3 
  .rodata.SNAKE_vDrawBoard.str1.4
-                0x080033f4        0x6 ./src/APP/SNAKE/SNAKE_prg.o
- *fill*         0x080033fa        0x2 
+                0x080034bc        0x6 ./src/APP/SNAKE/SNAKE_prg.o
+ *fill*         0x080034c2        0x2 
  .rodata.GAME_vDrawMenu.str1.4
-                0x080033fc        0xd ./src/APP/GAME/GAME_prg.o
- *fill*         0x08003409        0x3 
+                0x080034c4        0xd ./src/APP/GAME/GAME_prg.o
+ *fill*         0x080034d1        0x3 
  .rodata.G_pcGameList
-                0x0800340c        0xc ./src/APP/GAME/GAME_prg.o
+                0x080034d4        0xc ./src/APP/GAME/GAME_prg.o
  .rodata.str1.4
-                0x08003418       0x17 ./src/APP/GAME/GAME_prg.o
+                0x080034e0       0x17 ./src/APP/GAME/GAME_prg.o
                                  0x23 (size before relaxing)
  .rodata.CONNECT4_vInit.str1.4
-                0x0800342f        0xa ./src/APP/CONNECT4/CONNECT4_prg.o
- *fill*         0x0800342f        0x1 
+                0x080034f7        0xa ./src/APP/CONNECT4/CONNECT4_prg.o
+ *fill*         0x080034f7        0x1 
  .rodata.CONNECT4_vPlay.str1.4
-                0x08003430       0x1c ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x080034f8       0x1c ./src/APP/CONNECT4/CONNECT4_prg.o
                                  0x19 (size before relaxing)
- .rodata        0x0800344c       0x10 ./src/APP/main.o
+ .rodata        0x08003514       0x10 ./src/APP/main.o
  .rodata._svfprintf_r.str1.1
-                0x0800345c       0x11 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-svfprintf.o)
+                0x08003524       0x11 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-svfprintf.o)
  .rodata._printf_i.str1.1
-                0x0800346d       0x22 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08003535       0x22 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
  *(vtable)
  *(.eh_frame*)
  *(.glue_7)
- .glue_7        0x0800348f        0x0 linker stubs
+ .glue_7        0x08003557        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0800348f        0x0 linker stubs
+ .glue_7t       0x08003557        0x0 linker stubs
 
-.vfp11_veneer   0x08003490        0x0
- .vfp11_veneer  0x08003490        0x0 linker stubs
+.vfp11_veneer   0x08003558        0x0
+ .vfp11_veneer  0x08003558        0x0 linker stubs
 
-.v4_bx          0x08003490        0x0
- .v4_bx         0x08003490        0x0 linker stubs
+.v4_bx          0x08003558        0x0
+ .v4_bx         0x08003558        0x0 linker stubs
 
-.iplt           0x08003490        0x0
- .iplt          0x08003490        0x0 ./system/src/newlib/_exit.o
+.iplt           0x08003558        0x0
+ .iplt          0x08003558        0x0 ./system/src/newlib/_exit.o
 
-.rel.dyn        0x08003490        0x0
- .rel.iplt      0x08003490        0x0 ./system/src/newlib/_exit.o
+.rel.dyn        0x08003558        0x0
+ .rel.iplt      0x08003558        0x0 ./system/src/newlib/_exit.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x08003490                . = ALIGN (0x4)
-                0x08003490                __exidx_start = .
+                0x08003558                . = ALIGN (0x4)
+                0x08003558                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x08003490                __exidx_end = .
-                0x08003490                . = ALIGN (0x4)
-                0x08003490                _etext = .
-                0x08003490                __etext = .
+                0x08003558                __exidx_end = .
+                0x08003558                . = ALIGN (0x4)
+                0x08003558                _etext = .
+                0x08003558                __etext = .
 
-.data_CCMRAM    0x00000000        0x0 load address 0x08003490
+.data_CCMRAM    0x00000000        0x0 load address 0x08003558
  FILL mask 0xff
  *(.data.CCMRAM .data.CCMRAM.*)
                 0x00000000                . = ALIGN (0x4)
-                0x08003490                _sidata = LOADADDR (.data)
+                0x08003558                _sidata = LOADADDR (.data)
 
-.data           0x20000000       0x9c load address 0x08003490
+.data           0x20000000       0xa0 load address 0x08003558
  FILL mask 0xff
                 0x20000000                _sdata = .
                 0x20000000                __data_start__ = .
@@ -2667,157 +2672,160 @@ END GROUP
  .data.TFT_RESET
                 0x20000028        0x7 ./src/HAL/TFT/TFT_prg.o
                 0x20000028                TFT_RESET
+ *fill*         0x2000002f        0x1 ff
+ .data.G_u32RandomState
+                0x20000030        0x4 ./src/APP/SNAKE/SNAKE_prg.o
  .data.G_u8FullDrawFlag
-                0x2000002f        0x1 ./src/APP/GAME/GAME_prg.o
+                0x20000034        0x1 ./src/APP/GAME/GAME_prg.o
  .data.G_u8CurrentPlayer
-                0x20000030        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x20000035        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
  .data.G_u8SelectedCol
-                0x20000031        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
- *fill*         0x20000032        0x2 ff
+                0x20000036        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
+ *fill*         0x20000037        0x1 ff
  .data._impure_ptr
-                0x20000034        0x4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-impure.o)
-                0x20000034                _impure_ptr
+                0x20000038        0x4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-impure.o)
+                0x20000038                _impure_ptr
  .data.impure_data
-                0x20000038       0x60 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-impure.o)
+                0x2000003c       0x60 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-impure.o)
  *(.data_end .data_end.*)
- .data_end      0x20000098        0x4 ./system/src/newlib/_startup.o
-                0x2000009c                . = ALIGN (0x4)
-                0x2000009c                _edata = .
-                0x2000009c                __data_end__ = .
+ .data_end      0x2000009c        0x4 ./system/src/newlib/_startup.o
+                0x200000a0                . = ALIGN (0x4)
+                0x200000a0                _edata = .
+                0x200000a0                __data_end__ = .
 
-.igot.plt       0x2000009c        0x0 load address 0x0800352c
- .igot.plt      0x2000009c        0x0 ./system/src/newlib/_exit.o
+.igot.plt       0x200000a0        0x0 load address 0x080035f8
+ .igot.plt      0x200000a0        0x0 ./system/src/newlib/_exit.o
 
 .bss_CCMRAM     0x00000000        0x0
  *(.bss.CCMRAM .bss.CCMRAM.*)
 
-.bss            0x2000009c      0x270
-                0x2000009c                __bss_start__ = .
-                0x2000009c                _sbss = .
+.bss            0x200000a0      0x270
+                0x200000a0                __bss_start__ = .
+                0x200000a0                _sbss = .
  *(.bss_begin .bss_begin.*)
- .bss_begin     0x2000009c        0x4 ./system/src/newlib/_startup.o
+ .bss_begin     0x200000a0        0x4 ./system/src/newlib/_startup.o
  *(.bss .bss.*)
  .bss.current_heap_end.3961
-                0x200000a0        0x4 ./system/src/newlib/_sbrk.o
+                0x200000a4        0x4 ./system/src/newlib/_sbrk.o
  .bss.name.4309
-                0x200000a4        0x1 ./system/src/newlib/_syscalls.o
- *fill*         0x200000a5        0x3 
- .bss.buf.5205  0x200000a8       0x80 ./system/src/diag/Trace.o
+                0x200000a8        0x1 ./system/src/newlib/_syscalls.o
+ *fill*         0x200000a9        0x3 
+ .bss.buf.5205  0x200000ac       0x80 ./system/src/diag/Trace.o
  .bss.G_pu8TxBuffer
-                0x20000128        0x4 ./src/MCAL/USART/USART_prg.o
-                0x20000128                G_pu8TxBuffer
+                0x2000012c        0x4 ./src/MCAL/USART/USART_prg.o
+                0x2000012c                G_pu8TxBuffer
  .bss.G_u8TxIndex
-                0x2000012c        0x1 ./src/MCAL/USART/USART_prg.o
-                0x2000012c                G_u8TxIndex
+                0x20000130        0x1 ./src/MCAL/USART/USART_prg.o
+                0x20000130                G_u8TxIndex
  .bss.G_u8TxLength
-                0x2000012d        0x1 ./src/MCAL/USART/USART_prg.o
-                0x2000012d                G_u8TxLength
- *fill*         0x2000012e        0x2 
- .bss.G_FPTR    0x20000130        0x4 ./src/MCAL/SYSTICK/SYSTICK_prg.o
+                0x20000131        0x1 ./src/MCAL/USART/USART_prg.o
+                0x20000131                G_u8TxLength
+ *fill*         0x20000132        0x2 
+ .bss.G_FPTR    0x20000134        0x4 ./src/MCAL/SYSTICK/SYSTICK_prg.o
  .bss.G_u8SingleFlag
-                0x20000134        0x1 ./src/MCAL/SYSTICK/SYSTICK_prg.o
- *fill*         0x20000135        0x3 
- .bss.G_FPTR    0x20000138       0x40 ./src/MCAL/EXTI/EXTI_prg.o
- .bss.G_FPTR    0x20000178       0x1c ./src/MCAL/DMA/DMA_prg.o
- .bss.u16_Xend  0x20000194        0x2 ./src/HAL/TFT/TFT_prg.o
+                0x20000138        0x1 ./src/MCAL/SYSTICK/SYSTICK_prg.o
+ *fill*         0x20000139        0x3 
+ .bss.G_FPTR    0x2000013c       0x40 ./src/MCAL/EXTI/EXTI_prg.o
+ .bss.G_FPTR    0x2000017c       0x1c ./src/MCAL/DMA/DMA_prg.o
+ .bss.u16_Xend  0x20000198        0x2 ./src/HAL/TFT/TFT_prg.o
  .bss.u16_Xstart
-                0x20000196        0x2 ./src/HAL/TFT/TFT_prg.o
- .bss.u16_Yend  0x20000198        0x2 ./src/HAL/TFT/TFT_prg.o
- .bss.u16_Ystart
                 0x2000019a        0x2 ./src/HAL/TFT/TFT_prg.o
+ .bss.u16_Yend  0x2000019c        0x2 ./src/HAL/TFT/TFT_prg.o
+ .bss.u16_Ystart
+                0x2000019e        0x2 ./src/HAL/TFT/TFT_prg.o
  .bss.G_u32LastTimestamp
-                0x2000019c        0x4 ./src/HAL/IR/IR_prg.o
+                0x200001a0        0x4 ./src/HAL/IR/IR_prg.o
  .bss.G_u8BitCount
-                0x200001a0        0x1 ./src/HAL/IR/IR_prg.o
- *fill*         0x200001a1        0x3 
+                0x200001a4        0x1 ./src/HAL/IR/IR_prg.o
+ *fill*         0x200001a5        0x3 
  .bss.G_u8Frame
-                0x200001a4        0x4 ./src/HAL/IR/IR_prg.o
+                0x200001a8        0x4 ./src/HAL/IR/IR_prg.o
  .bss.G_xConfig
-                0x200001a8       0x10 ./src/HAL/IR/IR_prg.o
- .bss.G_xState  0x200001b8        0x1 ./src/HAL/IR/IR_prg.o
- *fill*         0x200001b9        0x3 
+                0x200001ac       0x10 ./src/HAL/IR/IR_prg.o
+ .bss.G_xState  0x200001bc        0x1 ./src/HAL/IR/IR_prg.o
+ *fill*         0x200001bd        0x3 
  .bss.G_u8Board
-                0x200001bc        0x9 ./src/APP/TICTACTOE/TICTACTOE_prg.o
+                0x200001c0        0x9 ./src/APP/TICTACTOE/TICTACTOE_prg.o
  .bss.G_u8CurrentPlayer
-                0x200001c5        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .bss.G_u8CursorCol
-                0x200001c6        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .bss.G_u8CursorMove
-                0x200001c7        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .bss.G_u8CursorRow
-                0x200001c8        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .bss.G_u8ExitFlag
                 0x200001c9        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .bss.G_u8PlaceFlag
+ .bss.G_u8CursorCol
                 0x200001ca        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- *fill*         0x200001cb        0x1 
- .bss.G_u32LastMoveTime
-                0x200001cc        0x4 ./src/APP/SNAKE/SNAKE_prg.o
- .bss.G_u8Direction
-                0x200001d0        0x1 ./src/APP/SNAKE/SNAKE_prg.o
+ .bss.G_u8CursorMove
+                0x200001cb        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
+ .bss.G_u8CursorRow
+                0x200001cc        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
  .bss.G_u8ExitFlag
-                0x200001d1        0x1 ./src/APP/SNAKE/SNAKE_prg.o
- .bss.G_u8FoodX
-                0x200001d2        0x1 ./src/APP/SNAKE/SNAKE_prg.o
- .bss.G_u8FoodY
-                0x200001d3        0x1 ./src/APP/SNAKE/SNAKE_prg.o
- .bss.G_u8RequestedDirection
+                0x200001cd        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
+ .bss.G_u8PlaceFlag
+                0x200001ce        0x1 ./src/APP/TICTACTOE/TICTACTOE_prg.o
+ *fill*         0x200001cf        0x1 
+ .bss.G_u32LastMoveTime
+                0x200001d0        0x4 ./src/APP/SNAKE/SNAKE_prg.o
+ .bss.G_u8Direction
                 0x200001d4        0x1 ./src/APP/SNAKE/SNAKE_prg.o
- .bss.G_u8SnakeLength
+ .bss.G_u8ExitFlag
                 0x200001d5        0x1 ./src/APP/SNAKE/SNAKE_prg.o
- *fill*         0x200001d6        0x2 
+ .bss.G_u8FoodX
+                0x200001d6        0x1 ./src/APP/SNAKE/SNAKE_prg.o
+ .bss.G_u8FoodY
+                0x200001d7        0x1 ./src/APP/SNAKE/SNAKE_prg.o
+ .bss.G_u8RequestedDirection
+                0x200001d8        0x1 ./src/APP/SNAKE/SNAKE_prg.o
+ .bss.G_u8SnakeLength
+                0x200001d9        0x1 ./src/APP/SNAKE/SNAKE_prg.o
+ *fill*         0x200001da        0x2 
  .bss.G_u8SnakeX
-                0x200001d8       0x78 ./src/APP/SNAKE/SNAKE_prg.o
+                0x200001dc       0x78 ./src/APP/SNAKE/SNAKE_prg.o
  .bss.G_u8SnakeY
-                0x20000250       0x78 ./src/APP/SNAKE/SNAKE_prg.o
+                0x20000254       0x78 ./src/APP/SNAKE/SNAKE_prg.o
  .bss.G_u8CurrentSelection
-                0x200002c8        0x1 ./src/APP/GAME/GAME_prg.o
+                0x200002cc        0x1 ./src/APP/GAME/GAME_prg.o
  .bss.G_u8CurrentState
-                0x200002c9        0x1 ./src/APP/GAME/GAME_prg.o
+                0x200002cd        0x1 ./src/APP/GAME/GAME_prg.o
  .bss.G_u8PartialUpdateFlag
-                0x200002ca        0x1 ./src/APP/GAME/GAME_prg.o
+                0x200002ce        0x1 ./src/APP/GAME/GAME_prg.o
  .bss.G_u8PreviousSelection
-                0x200002cb        0x1 ./src/APP/GAME/GAME_prg.o
+                0x200002cf        0x1 ./src/APP/GAME/GAME_prg.o
  .bss.G_u8Board
-                0x200002cc       0x2a ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x200002d0       0x2a ./src/APP/CONNECT4/CONNECT4_prg.o
  .bss.G_u8CursorMoveFlag
-                0x200002f6        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x200002fa        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
  .bss.G_u8DropCoinFlag
-                0x200002f7        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x200002fb        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
  .bss.G_u8ExitGameFlag
-                0x200002f8        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
- *fill*         0x200002f9        0x3 
+                0x200002fc        0x1 ./src/APP/CONNECT4/CONNECT4_prg.o
+ *fill*         0x200002fd        0x3 
  .bss.__malloc_free_list
-                0x200002fc        0x4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-mallocr.o)
-                0x200002fc                __malloc_free_list
- .bss.__malloc_sbrk_start
                 0x20000300        0x4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-mallocr.o)
-                0x20000300                __malloc_sbrk_start
+                0x20000300                __malloc_free_list
+ .bss.__malloc_sbrk_start
+                0x20000304        0x4 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-mallocr.o)
+                0x20000304                __malloc_sbrk_start
  *(COMMON)
- COMMON         0x20000304        0x4 ./system/src/newlib/_syscalls.o
-                0x20000304                errno
+ COMMON         0x20000308        0x4 ./system/src/newlib/_syscalls.o
+                0x20000308                errno
  *(.bss_end .bss_end.*)
- .bss_end       0x20000308        0x4 ./system/src/newlib/_startup.o
-                0x2000030c                . = ALIGN (0x4)
-                0x2000030c                __bss_end__ = .
-                0x2000030c                _ebss = .
+ .bss_end       0x2000030c        0x4 ./system/src/newlib/_startup.o
+                0x20000310                . = ALIGN (0x4)
+                0x20000310                __bss_end__ = .
+                0x20000310                _ebss = .
 
 .noinit_CCMRAM
  *(.noinit.CCMRAM .noinit.CCMRAM.*)
 
-.noinit         0x2000030c        0x0
-                0x2000030c                _noinit = .
+.noinit         0x20000310        0x0
+                0x20000310                _noinit = .
  *(.noinit .noinit.*)
-                0x2000030c                . = ALIGN (0x4)
-                0x2000030c                _end_noinit = .
+                0x20000310                . = ALIGN (0x4)
+                0x20000310                _end_noinit = .
                 [!provide]                PROVIDE (end, _end_noinit)
                 [!provide]                PROVIDE (_end, _end_noinit)
                 [!provide]                PROVIDE (__end, _end_noinit)
                 [!provide]                PROVIDE (__end__, _end_noinit)
 
-._check_stack   0x2000030c      0x100
-                0x2000040c                . = (. + _Minimum_Stack_Size)
- *fill*         0x2000030c      0x100 
+._check_stack   0x20000310      0x100
+                0x20000410                . = (. + _Minimum_Stack_Size)
+ *fill*         0x20000310      0x100 
 
 .b1text
  *(.b1text)
@@ -2991,7 +2999,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x7e0
+.debug_aranges  0x00000000      0x7f0
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x28 ./system/src/newlib/_exit.o
@@ -3038,18 +3046,18 @@ END GROUP
  .debug_aranges
                 0x00000600       0x88 ./src/APP/TICTACTOE/TICTACTOE_prg.o
  .debug_aranges
-                0x00000688       0x68 ./src/APP/SNAKE/SNAKE_prg.o
+                0x00000688       0x78 ./src/APP/SNAKE/SNAKE_prg.o
  .debug_aranges
-                0x000006f0       0x60 ./src/APP/GAME/GAME_prg.o
+                0x00000700       0x60 ./src/APP/GAME/GAME_prg.o
  .debug_aranges
-                0x00000750       0x68 ./src/APP/CONNECT4/CONNECT4_prg.o
+                0x00000760       0x68 ./src/APP/CONNECT4/CONNECT4_prg.o
  .debug_aranges
-                0x000007b8       0x28 ./src/APP/main.o
+                0x000007c8       0x28 ./src/APP/main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x905b
+.debug_info     0x00000000     0x90f1
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x956 ./system/src/newlib/_exit.o
  .debug_info    0x00000956      0x942 ./system/src/newlib/_sbrk.o
@@ -3073,12 +3081,12 @@ END GROUP
  .debug_info    0x00006075      0xcf5 ./src/HAL/TFT/TFT_prg.o
  .debug_info    0x00006d6a      0x55a ./src/HAL/IR/IR_prg.o
  .debug_info    0x000072c4      0x721 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .debug_info    0x000079e5      0x51b ./src/APP/SNAKE/SNAKE_prg.o
- .debug_info    0x00007f00      0x7b3 ./src/APP/GAME/GAME_prg.o
- .debug_info    0x000086b3      0x55f ./src/APP/CONNECT4/CONNECT4_prg.o
- .debug_info    0x00008c12      0x449 ./src/APP/main.o
+ .debug_info    0x000079e5      0x584 ./src/APP/SNAKE/SNAKE_prg.o
+ .debug_info    0x00007f69      0x7e0 ./src/APP/GAME/GAME_prg.o
+ .debug_info    0x00008749      0x55f ./src/APP/CONNECT4/CONNECT4_prg.o
+ .debug_info    0x00008ca8      0x449 ./src/APP/main.o
 
-.debug_abbrev   0x00000000     0x2535
+.debug_abbrev   0x00000000     0x2567
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x1f3 ./system/src/newlib/_exit.o
  .debug_abbrev  0x000001f3      0x1fc ./system/src/newlib/_sbrk.o
@@ -3102,12 +3110,12 @@ END GROUP
  .debug_abbrev  0x00001b6b      0x1eb ./src/HAL/TFT/TFT_prg.o
  .debug_abbrev  0x00001d56      0x193 ./src/HAL/IR/IR_prg.o
  .debug_abbrev  0x00001ee9      0x143 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .debug_abbrev  0x0000202c      0x110 ./src/APP/SNAKE/SNAKE_prg.o
- .debug_abbrev  0x0000213c      0x15f ./src/APP/GAME/GAME_prg.o
- .debug_abbrev  0x0000229b      0x152 ./src/APP/CONNECT4/CONNECT4_prg.o
- .debug_abbrev  0x000023ed      0x148 ./src/APP/main.o
+ .debug_abbrev  0x0000202c      0x142 ./src/APP/SNAKE/SNAKE_prg.o
+ .debug_abbrev  0x0000216e      0x15f ./src/APP/GAME/GAME_prg.o
+ .debug_abbrev  0x000022cd      0x152 ./src/APP/CONNECT4/CONNECT4_prg.o
+ .debug_abbrev  0x0000241f      0x148 ./src/APP/main.o
 
-.debug_line     0x00000000     0x4f05
+.debug_line     0x00000000     0x4f6d
  *(.debug_line)
  .debug_line    0x00000000      0x41f ./system/src/newlib/_exit.o
  .debug_line    0x0000041f      0x3d3 ./system/src/newlib/_sbrk.o
@@ -3131,12 +3139,12 @@ END GROUP
  .debug_line    0x0000396a      0x329 ./src/HAL/TFT/TFT_prg.o
  .debug_line    0x00003c93      0x27e ./src/HAL/IR/IR_prg.o
  .debug_line    0x00003f11      0x38a ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .debug_line    0x0000429b      0x2bb ./src/APP/SNAKE/SNAKE_prg.o
- .debug_line    0x00004556      0x420 ./src/APP/GAME/GAME_prg.o
- .debug_line    0x00004976      0x3b5 ./src/APP/CONNECT4/CONNECT4_prg.o
- .debug_line    0x00004d2b      0x1da ./src/APP/main.o
+ .debug_line    0x0000429b      0x320 ./src/APP/SNAKE/SNAKE_prg.o
+ .debug_line    0x000045bb      0x423 ./src/APP/GAME/GAME_prg.o
+ .debug_line    0x000049de      0x3b5 ./src/APP/CONNECT4/CONNECT4_prg.o
+ .debug_line    0x00004d93      0x1da ./src/APP/main.o
 
-.debug_frame    0x00000000     0x14c0
+.debug_frame    0x00000000     0x14e8
  *(.debug_frame)
  .debug_frame   0x00000000       0x38 ./system/src/newlib/_exit.o
  .debug_frame   0x00000038       0x28 ./system/src/newlib/_sbrk.o
@@ -3160,27 +3168,27 @@ END GROUP
  .debug_frame   0x00000a10      0x1c8 ./src/HAL/TFT/TFT_prg.o
  .debug_frame   0x00000bd8       0xf0 ./src/HAL/IR/IR_prg.o
  .debug_frame   0x00000cc8      0x164 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .debug_frame   0x00000e2c      0x104 ./src/APP/SNAKE/SNAKE_prg.o
- .debug_frame   0x00000f30       0xe8 ./src/APP/GAME/GAME_prg.o
- .debug_frame   0x00001018      0x104 ./src/APP/CONNECT4/CONNECT4_prg.o
- .debug_frame   0x0000111c       0x40 ./src/APP/main.o
- .debug_frame   0x0000115c       0x50 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7-m\libgcc.a(_arm_muldivdf3.o)
- .debug_frame   0x000011ac       0x24 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7-m\libgcc.a(_arm_fixunsdfsi.o)
- .debug_frame   0x000011d0       0x20 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-errno.o)
- .debug_frame   0x000011f0       0x4c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-vsnprintf.o)
- .debug_frame   0x0000123c       0x90 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-svfprintf.o)
- .debug_frame   0x000012cc       0x60 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
- .debug_frame   0x0000132c       0x28 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memchr-stub.o)
- .debug_frame   0x00001354       0x28 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memcpy-stub.o)
- .debug_frame   0x0000137c       0x28 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memmove.o)
- .debug_frame   0x000013a4       0x38 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-freer.o)
- .debug_frame   0x000013dc       0x2c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-mallocr.o)
- .debug_frame   0x00001408       0x3c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-reallocr.o)
- .debug_frame   0x00001444       0x2c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-sbrkr.o)
- .debug_frame   0x00001470       0x30 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-mlock.o)
- .debug_frame   0x000014a0       0x20 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-msizer.o)
+ .debug_frame   0x00000e2c      0x124 ./src/APP/SNAKE/SNAKE_prg.o
+ .debug_frame   0x00000f50       0xf0 ./src/APP/GAME/GAME_prg.o
+ .debug_frame   0x00001040      0x104 ./src/APP/CONNECT4/CONNECT4_prg.o
+ .debug_frame   0x00001144       0x40 ./src/APP/main.o
+ .debug_frame   0x00001184       0x50 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7-m\libgcc.a(_arm_muldivdf3.o)
+ .debug_frame   0x000011d4       0x24 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7-m\libgcc.a(_arm_fixunsdfsi.o)
+ .debug_frame   0x000011f8       0x20 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-errno.o)
+ .debug_frame   0x00001218       0x4c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-vsnprintf.o)
+ .debug_frame   0x00001264       0x90 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .debug_frame   0x000012f4       0x60 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_frame   0x00001354       0x28 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memchr-stub.o)
+ .debug_frame   0x0000137c       0x28 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x000013a4       0x28 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-memmove.o)
+ .debug_frame   0x000013cc       0x38 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-freer.o)
+ .debug_frame   0x00001404       0x2c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-mallocr.o)
+ .debug_frame   0x00001430       0x3c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-reallocr.o)
+ .debug_frame   0x0000146c       0x2c c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-sbrkr.o)
+ .debug_frame   0x00001498       0x30 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-mlock.o)
+ .debug_frame   0x000014c8       0x20 c:/users/lenovo/downloads/programs/embedded_tools/03- imt sdk/imt_sdk_win_64/imt_sdk_win_64/winarm/armgcc/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7-m\libg_nano.a(lib_a-nano-msizer.o)
 
-.debug_str      0x00000000    0x5874d
+.debug_str      0x00000000    0x587d6
  *(.debug_str)
  .debug_str     0x00000000     0x7d07 ./system/src/newlib/_exit.o
                                0x7eda (size before relaxing)
@@ -3226,16 +3234,16 @@ END GROUP
                                0x3881 (size before relaxing)
  .debug_str     0x00057b7f      0x33e ./src/APP/TICTACTOE/TICTACTOE_prg.o
                                0x37f8 (size before relaxing)
- .debug_str     0x00057ebd      0x276 ./src/APP/SNAKE/SNAKE_prg.o
-                               0x3484 (size before relaxing)
- .debug_str     0x00058133      0x34f ./src/APP/GAME/GAME_prg.o
-                               0x37f4 (size before relaxing)
- .debug_str     0x00058482      0x1e3 ./src/APP/CONNECT4/CONNECT4_prg.o
+ .debug_str     0x00057ebd      0x2ff ./src/APP/SNAKE/SNAKE_prg.o
+                               0x34fe (size before relaxing)
+ .debug_str     0x000581bc      0x34f ./src/APP/GAME/GAME_prg.o
+                               0x3824 (size before relaxing)
+ .debug_str     0x0005850b      0x1e3 ./src/APP/CONNECT4/CONNECT4_prg.o
                                0x3873 (size before relaxing)
- .debug_str     0x00058665       0xe8 ./src/APP/main.o
+ .debug_str     0x000586ee       0xe8 ./src/APP/main.o
                                0x374b (size before relaxing)
 
-.debug_loc      0x00000000     0x2ec6
+.debug_loc      0x00000000     0x2f93
  *(.debug_loc)
  .debug_loc     0x00000000       0x85 ./system/src/newlib/_sbrk.o
  .debug_loc     0x00000085      0x1a9 ./system/src/newlib/_startup.o
@@ -3256,10 +3264,10 @@ END GROUP
  .debug_loc     0x00001a76      0x6fc ./src/HAL/TFT/TFT_prg.o
  .debug_loc     0x00002172      0x1bf ./src/HAL/IR/IR_prg.o
  .debug_loc     0x00002331      0x454 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .debug_loc     0x00002785      0x1d6 ./src/APP/SNAKE/SNAKE_prg.o
- .debug_loc     0x0000295b      0x218 ./src/APP/GAME/GAME_prg.o
- .debug_loc     0x00002b73      0x311 ./src/APP/CONNECT4/CONNECT4_prg.o
- .debug_loc     0x00002e84       0x42 ./src/APP/main.o
+ .debug_loc     0x00002785      0x2a3 ./src/APP/SNAKE/SNAKE_prg.o
+ .debug_loc     0x00002a28      0x218 ./src/APP/GAME/GAME_prg.o
+ .debug_loc     0x00002c40      0x311 ./src/APP/CONNECT4/CONNECT4_prg.o
+ .debug_loc     0x00002f51       0x42 ./src/APP/main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -3277,7 +3285,7 @@ END GROUP
  *(.debug_varnames)
 OUTPUT(M3_labs.elf elf32-littlearm)
 
-.debug_ranges   0x00000000      0x700
+.debug_ranges   0x00000000      0x710
  .debug_ranges  0x00000000       0x18 ./system/src/newlib/_exit.o
  .debug_ranges  0x00000018       0x10 ./system/src/newlib/_sbrk.o
  .debug_ranges  0x00000028       0x78 ./system/src/newlib/_startup.o
@@ -3300,10 +3308,10 @@ OUTPUT(M3_labs.elf elf32-littlearm)
  .debug_ranges  0x00000478       0x90 ./src/HAL/TFT/TFT_prg.o
  .debug_ranges  0x00000508       0x50 ./src/HAL/IR/IR_prg.o
  .debug_ranges  0x00000558       0x78 ./src/APP/TICTACTOE/TICTACTOE_prg.o
- .debug_ranges  0x000005d0       0x58 ./src/APP/SNAKE/SNAKE_prg.o
- .debug_ranges  0x00000628       0x50 ./src/APP/GAME/GAME_prg.o
- .debug_ranges  0x00000678       0x70 ./src/APP/CONNECT4/CONNECT4_prg.o
- .debug_ranges  0x000006e8       0x18 ./src/APP/main.o
+ .debug_ranges  0x000005d0       0x68 ./src/APP/SNAKE/SNAKE_prg.o
+ .debug_ranges  0x00000638       0x50 ./src/APP/GAME/GAME_prg.o
+ .debug_ranges  0x00000688       0x70 ./src/APP/CONNECT4/CONNECT4_prg.o
+ .debug_ranges  0x000006f8       0x18 ./src/APP/main.o
 
 .debug_macro    0x00000000     0x30b8
  .debug_macro   0x00000000      0x1b4 ./system/src/newlib/_exit.o

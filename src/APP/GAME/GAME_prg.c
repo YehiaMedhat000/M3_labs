@@ -104,7 +104,9 @@ void GAME_vSelectISR(void)
     if (G_u8CurrentState == STATE_MENU)
     {
         G_u8CurrentState = (AppState_t)(G_u8CurrentSelection + 1);
-//        G_u8FullDrawFlag = 1;
+
+        if (G_u8CurrentState == STATE_SNAKE)
+            SNAKE_vSetRandomSeed(MSYSTICK_u32GetElapsedTime());
     }
 }
 
