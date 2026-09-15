@@ -4,13 +4,14 @@
 #include "../../MCAL/EXTI/EXTI_int.h"
 #include "../../MCAL/GPIO/GPIO_int.h"
 #include "../../MCAL/NVIC/NVIC_int.h"
-#include "../../MCAL/SYSTICK/SYSTICK_int.h"
+#include "../../MCAL/TIM/TIM_int.h"
 #include "IR_int.h"
 #include "IR_prv.h"
 
 static HIR_Config_t G_xConfig;
 static HIR_State_t G_xState = HIR_WAIT_LEADER_START;
 static u32 G_u32LastTimestamp;
+static volatile u32 G_u32LastPulse;
 static u8 G_u8Frame[HIR_NEC_FRAME_BYTES];
 static u8 G_u8BitCount;
 
@@ -30,16 +31,17 @@ static u8 HIR_u8InRange(u32 A_u32Value, u32 A_u32Min, u32 A_u32Max)
 
 u32 HIR_u32MeasurePulse(void)
 {
-	u32 L_u32Now = MSYSTICK_u32GetElapsedTime();
-	u32 L_u32Delta;
-
-	if (L_u32Now >= G_u32LastTimestamp)
-		L_u32Delta = L_u32Now - G_u32LastTimestamp;
-	else
-		L_u32Delta = (HIR_TIMER_PERIOD_TICKS - G_u32LastTimestamp) + L_u32Now;
+	u32 L_u32Now = MTIM_u32GetCounter();
+	u32 L_u32Delta = MTIM_u32GetElapsed(G_u32LastTimestamp);
 
 	G_u32LastTimestamp = L_u32Now;
-	return HIR_u32ToMicroseconds(L_u32Delta);
+	G_u32LastPulse = HIR_u32ToMicroseconds(L_u32Delta);
+	return G_u32LastPulse;
+}
+
+u32 HIR_u32GetLastPulse(void)
+{
+	return G_u32LastPulse;
 }
 
 u8 HIR_u8DecodeFrame(const u8 *A_pu8Frame, u8 *A_pu8Address, u8 *A_pu8Command)
@@ -79,7 +81,7 @@ static void HIR_vOnEdge(void)
 	 */
 	if (G_xState == HIR_WAIT_LEADER_START)
 	{
-		G_u32LastTimestamp = MSYSTICK_u32GetElapsedTime();
+		G_u32LastTimestamp = MTIM_u32GetCounter();
 		G_xState = HIR_WAIT_LEADER_INTERVAL;
 		return;
 	}
@@ -141,13 +143,13 @@ static void HIR_vOnEdge(void)
 
 void HIR_vReset(void)
 {
-	G_u32LastTimestamp = MSYSTICK_u32GetElapsedTime();
+	G_u32LastTimestamp = MTIM_u32GetCounter();
+	G_u32LastPulse = 0;
 	HIR_vResetFrame();
 }
 
 void HIR_vResume(void)
 {
-	MSYSTICK_vStartTimer(HIR_TIMER_PERIOD_TICKS - 1);
 	HIR_vReset();
 }
 
@@ -160,9 +162,6 @@ void HIR_vInit(const HIR_Config_t *A_xConfig)
 	if (G_xConfig.TicksPerUS == 0)
 		G_xConfig.TicksPerUS = HIR_DEFAULT_TICKS_PER_US;
 
-	MSYSTICK_CONFIG_t L_xTimer = {DISABLE_TICKINT, STK_AHB_8};
-	MSYSTICK_vInit(&L_xTimer);
-	MSYSTICK_vStartTimer(HIR_TIMER_PERIOD_TICKS - 1);
 	HIR_vReset();
 
 	MEXTI_vInit();

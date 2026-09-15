@@ -4,20 +4,15 @@
 #include "../MCAL/AFIO/AFIO_int.h"
 #include "../MCAL/EXTI/EXTI_int.h"
 #include "../MCAL/NVIC/NVIC_int.h"
+#include "../MCAL/TIM/TIM_int.h"
 #include "../HAL/TFT/TFT_int.h"
 #include "../HAL/IR/IR_int.h"
 #include "GAME/GAME_int.h"
 
 static void IR_vCommandReceived(u8 A_u8Address, u8 A_u8Command)
 {
-    /*
-     * Accept commands only from the configured NEC remote address.
-     * The measured command values are handled by GAME_vHandleIRCommand().
-     */
     if (A_u8Address == HIR_NEC_REMOTE_ADDRESS)
-    {
         GAME_vHandleIRCommand(A_u8Command);
-    }
 }
 
 int main(void)
@@ -47,6 +42,11 @@ int main(void)
         .PullType = GPIO_PULL_UP
     };
 
+    MTIM_Config_t L_xTimerConfig = {
+        .InputClockHz = MTIM_DEFAULT_INPUT_HZ,
+        .TickFrequencyHz = MTIM_DEFAULT_TICK_HZ
+    };
+
     HIR_Config_t L_xIRConfig = {
         .ExtiLine = L0,
         .ExtiPort = AFIO_PORT_A,
@@ -57,40 +57,26 @@ int main(void)
         .CommandCallback = IR_vCommandReceived
     };
 
-    /*
-     * Initialize the system clock and required peripheral clocks.
-     */
     MRCC_vInit();
     MRCC_vEnableClk(RCC_APB2, RCC_GPIOA);
     MRCC_vEnableClk(RCC_APB2, RCC_GPIOB);
     MRCC_vEnableClk(RCC_APB2, RCC_AFIO);
     MRCC_vEnableClk(RCC_APB2, RCC_SPI1);
 
-    /*
-     * PA0 receives the demodulated IR signal.
-     * PA5 and PA7 are the TFT SPI clock and MOSI pins.
-     */
     MGPIO_vPinInit(&L_xIRPin);
     MGPIO_vPinInit(&L_xMOSI);
     MGPIO_vPinInit(&L_xSCK);
 
     /*
-     * Initialize the TFT before the menu is rendered.
+     * TIM2 is the only application timing source. It must be started
+     * before TFT initialization because TFT reset uses TIM delays.
      */
-    HTFT_vInit();
+    MTIM_vInit(&L_xTimerConfig);
+    MTIM_vStart();
 
-    /*
-     * Initialize the NEC receiver.
-     *
-     * At an 8 MHz system clock with HCLK / 8 SysTick:
-     * 8 MHz / 8 = 1 MHz, so one timer tick equals one microsecond.
-     */
+    HTFT_vInit();
     HIR_vInit(&L_xIRConfig);
 
-    /*
-     * GAME_vTaskHandler() renders the menu and enters Connect 4
-     * when the EQ/select command is received.
-     */
     while (1)
     {
         GAME_vTaskHandler();

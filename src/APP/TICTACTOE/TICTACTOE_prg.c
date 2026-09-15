@@ -1,6 +1,6 @@
 #include "../../LIB/STD_TYPES.h"
 #include "../../MCAL/GPIO/GPIO_int.h"
-#include "../../MCAL/SYSTICK/SYSTICK_int.h"
+#include "../../MCAL/TIM/TIM_int.h"
 #include "../../HAL/TFT/TFT_int.h"
 #include "../../HAL/IR/IR_int.h"
 #include "TICTACTOE_int.h"
@@ -305,7 +305,7 @@ void TICTACTOE_vPlay(void)
                     else
                         HTFT_vWriteString(35, 10, "O WINS", TFT_YELLOW, TFT_BLACK, 1);
 
-                    MSYSTICK_vSetDelayMS(2500);
+                    MTIM_vSetDelayMS(2500);
                     HIR_vResume();
 
                     if (G_u8ExitFlag == 0)
@@ -314,7 +314,7 @@ void TICTACTOE_vPlay(void)
                 else if (TICTACTOE_u8IsDraw())
                 {
                     HTFT_vWriteString(35, 10, "DRAW", TFT_CYAN, TFT_BLACK, 1);
-                    MSYSTICK_vSetDelayMS(1500);
+                    MTIM_vSetDelayMS(1500);
                     HIR_vResume();
 
                     if (G_u8ExitFlag == 0)

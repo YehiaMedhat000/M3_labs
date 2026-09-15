@@ -2,7 +2,7 @@
 #include "../../LIB/BIT_MATH.h"
 #include "../../MCAL/GPIO/GPIO_int.h"
 #include "../../MCAL/SPI/SPI_int.h"
-#include "../../MCAL/SYSTICK/SYSTICK_int.h"
+#include "../../MCAL/TIM/TIM_int.h"
 #include "TFT_prv.h"
 #include "TFT_int.h"
 
@@ -134,22 +134,19 @@ static void Write_data(u8 A_u8data)
 static void HTFT_vReset()
 {
 	MGPIO_vSetPinValue(TFT_RESET.Port, TFT_RESET.Pin, 1);
-	MSYSTICK_vSetDelayUS(100);
+	MTIM_vSetDelayUS(100);
 	MGPIO_vSetPinValue(TFT_RESET.Port, TFT_RESET.Pin, 0);
-	MSYSTICK_vSetDelayUS(1);
+	MTIM_vSetDelayUS(1);
 	MGPIO_vSetPinValue(TFT_RESET.Port, TFT_RESET.Pin, 1);
-	MSYSTICK_vSetDelayUS(100);
+	MTIM_vSetDelayUS(100);
 	MGPIO_vSetPinValue(TFT_RESET.Port, TFT_RESET.Pin, 0);
-	MSYSTICK_vSetDelayUS(100);
+	MTIM_vSetDelayUS(100);
 	MGPIO_vSetPinValue(TFT_RESET.Port, TFT_RESET.Pin, 1);
-	MSYSTICK_vSetDelayMS(120);
+	MTIM_vSetDelayMS(120);
 }
 
 void HTFT_vInit(void)
 {
-	MSYSTICK_CONFIG_t timer = {0, 0};
-	MSYSTICK_vInit(&timer);
-
 	MGPIO_vPinInit(&TFT_RESET);
 	MGPIO_vPinInit(&TFT_A0);
 	MSPI_vInit();
@@ -161,7 +158,7 @@ void HTFT_vInit(void)
 	Write_cmd(0x11);
 
 	// Wait 15 msec
-	MSYSTICK_vSetDelayMS(15);
+	MTIM_vSetDelayMS(15);
 
 	// Select Color Mode
 	Write_cmd(0x3A);
@@ -321,7 +318,7 @@ void HTFT_vDrawChar(u16 A_u16X, u16 A_u16Y, char A_charCh, u16 A_u16Color, u16 A
 		A_charCh = ' ';
 	}
 
-	/* 1-column spacing (rendered first for 180° rotation offset) */
+	/* 1-column spacing (rendered first for 180ï¿½ rotation offset) */
 	for (L_s8Row = 0; L_s8Row < 8; L_s8Row++)
 	{
 		u16 L_u16Px = A_u16X;

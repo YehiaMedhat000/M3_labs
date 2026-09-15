@@ -1,7 +1,7 @@
 #include "../../LIB/STD_TYPES.h"
 #include "../../HAL/TFT/TFT_int.h"
 #include "../../HAL/IR/IR_int.h"
-#include "../../MCAL/SYSTICK/SYSTICK_int.h"
+#include "../../MCAL/TIM/TIM_int.h"
 #include "SNAKE_int.h"
 
 #define SNAKE_BOARD_X       0
@@ -26,6 +26,7 @@ static volatile u8 G_u8Direction;
 static volatile u8 G_u8RequestedDirection;
 static volatile u8 G_u8ExitFlag;
 static u32 G_u32LastMoveTime;
+static u32 G_u32MoveElapsed;
 static u32 G_u32RandomState = 1;
 
 static void SNAKE_vDrawCell(u8 A_u8X, u8 A_u8Y, u16 A_u16Color);
@@ -276,7 +277,8 @@ void SNAKE_vInit(void)
     G_u8ExitFlag = 0;
     SNAKE_vResetRound();
     SNAKE_vDrawRound();
-    G_u32LastMoveTime = MSYSTICK_u32GetElapsedTime();
+    G_u32LastMoveTime = MTIM_u32GetCounter();
+    G_u32MoveElapsed = 0;
 }
 
 void SNAKE_vPlay(void)
@@ -285,10 +287,12 @@ void SNAKE_vPlay(void)
 
     while (G_u8ExitFlag == 0)
     {
-        if ((MSYSTICK_u32GetElapsedTime() - G_u32LastMoveTime) >=
-            SNAKE_MOVE_PERIOD_US)
+        G_u32MoveElapsed += MTIM_u32GetElapsed(G_u32LastMoveTime);
+        G_u32LastMoveTime = MTIM_u32GetCounter();
+
+        if (G_u32MoveElapsed >= SNAKE_MOVE_PERIOD_US)
         {
-            G_u32LastMoveTime = MSYSTICK_u32GetElapsedTime();
+            G_u32MoveElapsed -= SNAKE_MOVE_PERIOD_US;
             SNAKE_vMove();
         }
     }

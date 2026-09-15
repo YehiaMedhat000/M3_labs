@@ -12,17 +12,16 @@ typedef enum {
     STATE_MENU = 0,
     STATE_CONNECT_FOUR,
     STATE_TIC_TAC_TOE,
-    STATE_SNAKE
+    STATE_SNAKE,
+    STATE_MODE_MENU
 } AppState_t;
 
+typedef enum {
+    GAME_MODE_OFFLINE = 0,
+    GAME_MODE_ONLINE
+} GameMode_t;
+
 void GAME_vDrawMenu(void);
-
-/* EXTI Callbacks */
-void GAME_vNavigateUPISR(void);
-void GAME_vNavigateDownISR(void);
-void GAME_vSelectISR(void);
-
-void GAME_vInitISRs(void);
 
 /* Main Menu Task Handler (Call inside main's while(1) loop) */
 void GAME_vTaskHandler(void);

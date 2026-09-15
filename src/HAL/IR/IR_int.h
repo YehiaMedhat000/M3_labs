@@ -11,6 +11,7 @@
 /* NEC command bytes for the supplied remote control. */
 #define HIR_CMD_POWER              0x45
 #define HIR_CMD_VOLUME_UP          0x46
+#define HIR_CMD_MODE               0x46
 #define HIR_CMD_FUNCTION_STOP      0x47
 #define HIR_CMD_REWIND             0x40
 #define HIR_CMD_PLAY_PAUSE         0x40
@@ -53,6 +54,7 @@ void HIR_vResume(void);
  * This function is also useful when testing the timing layer independently.
  */
 u32 HIR_u32MeasurePulse(void);
+u32 HIR_u32GetLastPulse(void);
 
 /*
  * Validates and decodes a complete NEC frame stored LSB-first in four bytes.

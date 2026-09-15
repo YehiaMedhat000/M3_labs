@@ -50,6 +50,7 @@ src/MCAL/RCC \
 src/MCAL/RTOS \
 src/MCAL/SPI \
 src/MCAL/SYSTICK \
+src/MCAL/TIM \
 src/MCAL/USART \
 system/src/cmsis \
 system/src/cortexm \

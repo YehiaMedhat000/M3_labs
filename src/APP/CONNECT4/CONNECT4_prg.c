@@ -1,7 +1,7 @@
 #include "../../LIB/STD_TYPES.h"
 #include "../../LIB/BIT_MATH.h"
 #include "../../MCAL/GPIO/GPIO_int.h"
-#include "../../MCAL/SYSTICK/SYSTICK_int.h"
+#include "../../MCAL/TIM/TIM_int.h"
 #include "../../HAL/TFT/TFT_int.h"
 #include "../../HAL/IR/IR_int.h"
 #include "CONNECT4_int.h"
@@ -234,7 +234,7 @@ void CONNECT4_vPlay(void)
                     else
                         HTFT_vWriteString(19, 142, "YELLOW WINS!", TFT_YELLOW, TFT_BLACK, 1);
 
-                    MSYSTICK_vSetDelayMS(2500);
+                    MTIM_vSetDelayMS(2500);
                     HIR_vResume();
 
                     /*

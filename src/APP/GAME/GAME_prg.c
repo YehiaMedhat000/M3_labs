@@ -1,10 +1,8 @@
 #include "../../LIB/STD_TYPES.h"
 #include "../../LIB/BIT_MATH.h"
 #include "../../HAL/TFT/TFT_int.h"
+#include "../../MCAL/TIM/TIM_int.h"
 #include "../../MCAL/NVIC/NVIC_int.h"
-#include "../../MCAL/AFIO/AFIO_int.h"
-#include "../../MCAL/EXTI/EXTI_int.h"
-#include "../../MCAL/SYSTICK/SYSTICK_int.h"
 #include "../../HAL/IR/IR_int.h"
 #include "../CONNECT4/CONNECT4_int.h"
 #include "../TICTACTOE/TICTACTOE_int.h"
@@ -12,6 +10,7 @@
 #include "GAME_int.h"
 
 #define TOTAL_MENU_ITEMS 3
+#define TOTAL_MODE_ITEMS 2
 
 /* Encapsulated State Variables */
 static volatile AppState_t G_u8CurrentState      = STATE_MENU;
@@ -19,7 +18,12 @@ static volatile u8         G_u8CurrentSelection  = 0;
 static volatile u8         G_u8PreviousSelection = 0;
 static volatile u8         G_u8FullDrawFlag      = 1;
 static volatile u8         G_u8PartialUpdateFlag = 0;
+static volatile u8         G_u8ModeUpdateFlag   = 0;
+static volatile u8         G_u8IgnoreMenuSelect = 0;
 static volatile u8         G_u8ExitGameFlag      = 0;
+static volatile u8         G_u8ModeSelection    = GAME_MODE_OFFLINE;
+static volatile u8         G_u8PreviousModeSelection = GAME_MODE_OFFLINE;
+static volatile GameMode_t G_enGameMode         = GAME_MODE_OFFLINE;
 
 static const char *G_pcGameList[TOTAL_MENU_ITEMS] = {
     "CONNECT 4",
@@ -29,35 +33,21 @@ static const char *G_pcGameList[TOTAL_MENU_ITEMS] = {
 
 /* Private Function Prototypes */
 static void GAME_vRenderSingleItem(u8 A_u8ItemIndex, u8 A_u8IsHighlighted);
-static void GAME_vSetConnect4ISRsCallBack(void);
+static void GAME_vRenderModeItem(u8 A_u8ItemIndex, u8 A_u8IsHighlighted);
+static void GAME_vDrawModeMenu(void);
+static void GAME_vUpdateModeSelection(void);
 
-// ================= Interrupt Service Callbacks =================
-
-void GAME_vInitISRs(void)
+static void GAME_vEnterModeMenu(void)
 {
-    MEXTI_vEnableINT(L0);
-    MEXTI_vSetTrigger(L0, EXTI_Falling);
-    MAFIO_vSetLinePort(L0, AFIO_PORT_A);
-
-    MEXTI_vEnableINT(L1);
-    MEXTI_vSetTrigger(L1, EXTI_Falling);
-	MAFIO_vSetLinePort(L1, AFIO_PORT_A);
-
-	MEXTI_vEnableINT(L2);
-	MEXTI_vSetTrigger(L2, EXTI_Falling);
-	MAFIO_vSetLinePort(L2, AFIO_PORT_A);
-
-	MEXTI_vEnableINT(L3);
-	MEXTI_vSetTrigger(L3, EXTI_Falling);
-	MAFIO_vSetLinePort(L3, AFIO_PORT_A);
-
-    MNVIC_vEnablePeripheralINT(NVIC_EXTI0);
-    MNVIC_vEnablePeripheralINT(NVIC_EXTI1);
-    MNVIC_vEnablePeripheralINT(NVIC_EXTI2);
-    MNVIC_vEnablePeripheralINT(NVIC_EXTI3);
+    G_u8ModeSelection = GAME_MODE_ONLINE;
+    G_u8PreviousModeSelection = GAME_MODE_ONLINE;
+    G_u8CurrentState = STATE_MODE_MENU;
+    G_u8FullDrawFlag = 1;
+    G_u8PartialUpdateFlag = 0;
+    G_u8ModeUpdateFlag = 0;
 }
 
-void GAME_vNavigateDownISR(void)
+static void GAME_vNavigateDown(void)
 {
     if (G_u8CurrentState == STATE_MENU)
     {
@@ -78,7 +68,7 @@ void GAME_vNavigateDownISR(void)
     }
 }
 
-void GAME_vNavigateUPISR(void)
+static void GAME_vNavigateUp(void)
 {
     if (G_u8CurrentState == STATE_MENU)
     {
@@ -99,33 +89,93 @@ void GAME_vNavigateUPISR(void)
     }
 }
 
-void GAME_vSelectISR(void)
+static void GAME_vSelect(void)
 {
     if (G_u8CurrentState == STATE_MENU)
     {
         G_u8CurrentState = (AppState_t)(G_u8CurrentSelection + 1);
+        /*
+         * The selected game owns the next screen and redraws it from its
+         * own initialization routine. Do not leave a menu redraw pending.
+         */
+        G_u8FullDrawFlag = 0;
+        G_u8PartialUpdateFlag = 0;
 
         if (G_u8CurrentState == STATE_SNAKE)
-            SNAKE_vSetRandomSeed(MSYSTICK_u32GetElapsedTime());
+            SNAKE_vSetRandomSeed(MTIM_u32GetCounter());
+    }
+    else if (G_u8CurrentState == STATE_MODE_MENU)
+    {
+        if (G_u8ModeSelection == GAME_MODE_ONLINE)
+            G_enGameMode = GAME_MODE_ONLINE;
+
+        G_u8CurrentState = STATE_MENU;
+        G_u8FullDrawFlag = 1;
+        G_u8PartialUpdateFlag = 0;
+        G_u8ModeUpdateFlag = 0;
+        G_u8IgnoreMenuSelect = 1;
     }
 }
 
 void GAME_vHandleIRCommand(u8 A_u8Command)
 {
-    if (G_u8CurrentState == STATE_MENU)
+    if (A_u8Command == HIR_CMD_MODE &&
+        G_u8CurrentState == STATE_MENU)
+    {
+        GAME_vEnterModeMenu();
+    }
+    else if (G_u8CurrentState == STATE_MENU)
+    {
+        if (A_u8Command != HIR_CMD_EQ)
+            G_u8IgnoreMenuSelect = 0;
+
+        switch (A_u8Command)
+        {
+            case HIR_CMD_REWIND:
+                GAME_vNavigateDown();
+                break;
+
+            case HIR_CMD_FAST_FORWARD:
+                GAME_vNavigateUp();
+                break;
+
+            case HIR_CMD_EQ:
+                if (G_u8IgnoreMenuSelect == 0)
+                    GAME_vSelect();
+                break;
+
+            default:
+                break;
+        }
+    }
+    else if (G_u8CurrentState == STATE_MODE_MENU)
     {
         switch (A_u8Command)
         {
             case HIR_CMD_REWIND:
-                GAME_vNavigateDownISR();
+                G_u8PreviousModeSelection = G_u8ModeSelection;
+                G_u8ModeSelection = (G_u8ModeSelection == 0) ?
+                                    (TOTAL_MODE_ITEMS - 1) :
+                                    (G_u8ModeSelection - 1);
+                G_u8ModeUpdateFlag = 1;
                 break;
 
             case HIR_CMD_FAST_FORWARD:
-                GAME_vNavigateUPISR();
+                G_u8PreviousModeSelection = G_u8ModeSelection;
+                G_u8ModeSelection = (G_u8ModeSelection + 1) % TOTAL_MODE_ITEMS;
+                G_u8ModeUpdateFlag = 1;
                 break;
 
             case HIR_CMD_EQ:
-                GAME_vSelectISR();
+                GAME_vSelect();
+                break;
+
+            case HIR_CMD_POWER:
+                G_u8CurrentState = STATE_MENU;
+                G_u8FullDrawFlag = 1;
+                G_u8PartialUpdateFlag = 0;
+                G_u8ModeUpdateFlag = 0;
+                G_u8IgnoreMenuSelect = 1;
                 break;
 
             default:
@@ -144,16 +194,6 @@ void GAME_vHandleIRCommand(u8 A_u8Command)
     {
         SNAKE_vHandleIRCommand(A_u8Command);
     }
-}
-
-static void GAME_vSetConnect4ISRsCallBack(void)
-{
-    /*
-     * The single EXTI line is reserved for NEC IR edge capture.
-     * Connect 4 commands are routed by GAME_vHandleIRCommand()
-     * after the IR driver decodes them, so no EXTI callback is
-     * reassigned here.
-     */
 }
 
 // ================= Menu Rendering Logic =================
@@ -181,6 +221,7 @@ static void GAME_vRenderSingleItem(u8 A_u8ItemIndex, u8 A_u8IsHighlighted)
 
         HTFT_vWriteString(L_u16StartX, L_u16YPos, G_pcGameList[A_u8ItemIndex], TFT_BLACK, TFT_CYAN, 1);
     }
+
     else
     {
         /* Normal: Black background box, White text */
@@ -190,6 +231,56 @@ static void GAME_vRenderSingleItem(u8 A_u8ItemIndex, u8 A_u8IsHighlighted)
 
         HTFT_vWriteString(L_u16StartX, L_u16YPos, G_pcGameList[A_u8ItemIndex], TFT_WHITE, TFT_BLACK, 1);
     }
+}
+
+static void GAME_vRenderModeItem(u8 A_u8ItemIndex, u8 A_u8IsHighlighted)
+{
+    static const char *L_pcModeList[TOTAL_MODE_ITEMS] = {
+        "CANCEL",
+        "INITIALIZE"
+    };
+    u8 L_u8Len = 0;
+    u16 L_u16StartX;
+    u16 L_u16YPos = 105 - (A_u8ItemIndex * 20);
+    const char *L_pcPtr = L_pcModeList[A_u8ItemIndex];
+
+    while (*L_pcPtr++)
+        L_u8Len++;
+
+    L_u16StartX = (128 - (L_u8Len * 6)) / 2;
+
+    HTFT_vSetXPos(5, 122);
+    HTFT_vSetYPos(L_u16YPos - 3, L_u16YPos + 12);
+    HTFT_vFillRectangle(A_u8IsHighlighted ? TFT_CYAN : TFT_BLACK);
+    HTFT_vWriteString(
+        L_u16StartX,
+        L_u16YPos,
+        L_pcModeList[A_u8ItemIndex],
+        A_u8IsHighlighted ? TFT_BLACK : TFT_WHITE,
+        A_u8IsHighlighted ? TFT_CYAN : TFT_BLACK,
+        1
+    );
+}
+
+static void GAME_vDrawModeMenu(void)
+{
+    u8 L_u8Item;
+
+    HTFT_vFillBackgroundColor(TFT_BLACK);
+    HTFT_vWriteString(31, 143, "ONLINE MODE", TFT_CYAN, TFT_BLACK, 1);
+
+    for (L_u8Item = 0; L_u8Item < TOTAL_MODE_ITEMS; L_u8Item++)
+        GAME_vRenderModeItem(L_u8Item, L_u8Item == G_u8ModeSelection);
+
+    G_u8FullDrawFlag = 0;
+    G_u8ModeUpdateFlag = 0;
+}
+
+static void GAME_vUpdateModeSelection(void)
+{
+    GAME_vRenderModeItem(G_u8PreviousModeSelection, 0);
+    GAME_vRenderModeItem(G_u8ModeSelection, 1);
+    G_u8ModeUpdateFlag = 0;
 }
 
 /**
@@ -239,20 +330,41 @@ void GAME_vUpdateMenuSelection(void)
 
 void GAME_vTaskHandler(void)
 {
-    switch (G_u8CurrentState)
+	AppState_t L_eState;
+	u8 L_u8FullDraw, L_u8PartialUpdate, L_u8ModeUpdate;
+
+	/*
+	 * EXTI0 is the only interrupt used by the IR receiver. Masking its
+	 * NVIC position keeps the snapshot atomic without blocking unrelated
+	 * interrupts globally.
+	 */
+	MNVIC_vDisablePeripheralINT(NVIC_EXTI0);
+	L_eState          = G_u8CurrentState;
+	L_u8FullDraw      = G_u8FullDrawFlag;
+	L_u8PartialUpdate = G_u8PartialUpdateFlag;
+	L_u8ModeUpdate    = G_u8ModeUpdateFlag;
+	MNVIC_vEnablePeripheralINT(NVIC_EXTI0);
+
+	switch (L_eState)
     {
         case STATE_MENU:
 
-        	if (G_u8FullDrawFlag)
+        	if (L_u8FullDraw)
                 GAME_vDrawMenu();
 
-            else if (G_u8PartialUpdateFlag)
+            else if (L_u8PartialUpdate)
                 GAME_vUpdateMenuSelection();
 
             break;
 
+        case STATE_MODE_MENU:
+            if (L_u8FullDraw)
+                GAME_vDrawModeMenu();
+            else if (L_u8ModeUpdate)
+                GAME_vUpdateModeSelection();
+            break;
+
         case STATE_CONNECT_FOUR:
-        	GAME_vSetConnect4ISRsCallBack();
         	CONNECT4_vPlay();
         	G_u8CurrentState = STATE_MENU;
         	G_u8FullDrawFlag = 1;
