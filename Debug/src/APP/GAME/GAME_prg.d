@@ -13,6 +13,9 @@ src/APP/GAME/GAME_prg.o: ../src/APP/GAME/GAME_prg.c \
  ../src/APP/GAME/../TICTACTOE/../../LIB/STD_TYPES.h \
  ../src/APP/GAME/../SNAKE/SNAKE_int.h \
  ../src/APP/GAME/../SNAKE/../../LIB/STD_TYPES.h \
+ ../src/APP/GAME/../SCORE/SCORE_int.h \
+ ../src/APP/GAME/../SCORE/../../LIB/STD_TYPES.h \
+ ../src/APP/GAME/../SCORE/../../HAL/S2P/S2P_int.h \
  ../src/APP/GAME/GAME_int.h
 
 ../src/APP/GAME/../../LIB/STD_TYPES.h:
@@ -42,5 +45,11 @@ src/APP/GAME/GAME_prg.o: ../src/APP/GAME/GAME_prg.c \
 ../src/APP/GAME/../SNAKE/SNAKE_int.h:
 
 ../src/APP/GAME/../SNAKE/../../LIB/STD_TYPES.h:
+
+../src/APP/GAME/../SCORE/SCORE_int.h:
+
+../src/APP/GAME/../SCORE/../../LIB/STD_TYPES.h:
+
+../src/APP/GAME/../SCORE/../../HAL/S2P/S2P_int.h:
 
 ../src/APP/GAME/GAME_int.h:

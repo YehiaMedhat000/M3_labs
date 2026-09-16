@@ -7,6 +7,7 @@
 #include "../CONNECT4/CONNECT4_int.h"
 #include "../TICTACTOE/TICTACTOE_int.h"
 #include "../SNAKE/SNAKE_int.h"
+#include "../SCORE/SCORE_int.h"
 #include "GAME_int.h"
 
 #define TOTAL_MENU_ITEMS 3
@@ -366,6 +367,7 @@ void GAME_vTaskHandler(void)
 
         case STATE_CONNECT_FOUR:
         	CONNECT4_vPlay();
+        	SCORE_vReset();
         	G_u8CurrentState = STATE_MENU;
         	G_u8FullDrawFlag = 1;
         	GAME_vDrawMenu();
@@ -373,6 +375,7 @@ void GAME_vTaskHandler(void)
 
         case STATE_TIC_TAC_TOE:
             TICTACTOE_vPlay();
+            SCORE_vReset();
             G_u8CurrentState = STATE_MENU;
             G_u8FullDrawFlag = 1;
             GAME_vDrawMenu();
@@ -380,6 +383,7 @@ void GAME_vTaskHandler(void)
 
         case STATE_SNAKE:
             SNAKE_vPlay();
+            SCORE_vReset();
             G_u8CurrentState = STATE_MENU;
             G_u8FullDrawFlag = 1;
             GAME_vDrawMenu();

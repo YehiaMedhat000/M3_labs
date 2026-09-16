@@ -4,6 +4,7 @@
 #include "../../MCAL/TIM/TIM_int.h"
 #include "../../HAL/TFT/TFT_int.h"
 #include "../../HAL/IR/IR_int.h"
+#include "../SCORE/SCORE_int.h"
 #include "CONNECT4_int.h"
 
 /* Display & Board Layout Constants for 128x160 TFT */
@@ -229,6 +230,9 @@ void CONNECT4_vPlay(void)
                 /* Win Check */
                 if (ConnectFour_u8CheckWin(G_u8CurrentPlayer))
                 {
+                    SCORE_vIncrement((G_u8CurrentPlayer == 1) ?
+                                     SCORE_PLAYER_ONE : SCORE_PLAYER_TWO);
+
                     if (G_u8CurrentPlayer == 1)
                         HTFT_vWriteString(28, 142, "RED WINS!", TFT_RED, TFT_BLACK, 1);
                     else

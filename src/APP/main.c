@@ -5,9 +5,11 @@
 #include "../MCAL/EXTI/EXTI_int.h"
 #include "../MCAL/NVIC/NVIC_int.h"
 #include "../MCAL/TIM/TIM_int.h"
+#include "../HAL/S2P/S2P_int.h"
 #include "../HAL/TFT/TFT_int.h"
 #include "../HAL/IR/IR_int.h"
 #include "GAME/GAME_int.h"
+#include "SCORE/SCORE_int.h"
 
 static void IR_vCommandReceived(u8 A_u8Address, u8 A_u8Command)
 {
@@ -42,6 +44,14 @@ int main(void)
         .PullType = GPIO_PULL_UP
     };
 
+    S2P_PinConfig_t L_xScoreSegments = {
+        .Port = GPIO_PORTB,
+        .DataPin = GPIO_PIN5,
+        .ShiftCLKPin = GPIO_PIN6,
+        .LatchCLKPin = GPIO_PIN7,
+        .ResetPin = GPIO_PIN8
+    };
+
     MTIM_Config_t L_xTimerConfig = {
         .InputClockHz = MTIM_DEFAULT_INPUT_HZ,
         .TickFrequencyHz = MTIM_DEFAULT_TICK_HZ
@@ -67,20 +77,15 @@ int main(void)
     MGPIO_vPinInit(&L_xMOSI);
     MGPIO_vPinInit(&L_xSCK);
 
-    /*
-     * TIM2 is the only application timing source. It must be started
-     * before TFT initialization because TFT reset uses TIM delays.
-     */
     MTIM_vInit(&L_xTimerConfig);
     MTIM_vStart();
 
     HTFT_vInit();
+    SCORE_vInit(&L_xScoreSegments);
     HIR_vInit(&L_xIRConfig);
 
     while (1)
-    {
         GAME_vTaskHandler();
-    }
 
     return 0;
 }

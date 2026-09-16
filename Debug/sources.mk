@@ -30,6 +30,7 @@ SUBDIRS := \
 src/APP/CONNECT4 \
 src/APP/GAME \
 src/APP/HexParser \
+src/APP/SCORE \
 src/APP/SNAKE \
 src/APP/TICTACTOE \
 src/APP \
@@ -38,7 +39,7 @@ src/HAL/IR \
 src/HAL/LEDMAT \
 src/HAL/LEDMAT_S2P \
 src/HAL/S2P \
-src/HAL/SSD \
+src/HAL/SSD_S2P \
 src/HAL/TFT \
 src/MCAL/AFIO \
 src/MCAL/DMA \

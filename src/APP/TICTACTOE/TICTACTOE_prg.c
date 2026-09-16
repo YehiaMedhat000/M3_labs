@@ -3,6 +3,7 @@
 #include "../../MCAL/TIM/TIM_int.h"
 #include "../../HAL/TFT/TFT_int.h"
 #include "../../HAL/IR/IR_int.h"
+#include "../SCORE/SCORE_int.h"
 #include "TICTACTOE_int.h"
 
 #define TICTACTOE_SIZE       3
@@ -300,6 +301,9 @@ void TICTACTOE_vPlay(void)
 
                 if (TICTACTOE_u8HasWinner(G_u8CurrentPlayer))
                 {
+                    SCORE_vIncrement((G_u8CurrentPlayer == 1) ?
+                                     SCORE_PLAYER_ONE : SCORE_PLAYER_TWO);
+
                     if (G_u8CurrentPlayer == 1)
                         HTFT_vWriteString(35, 10, "X WINS", TFT_RED, TFT_BLACK, 1);
                     else

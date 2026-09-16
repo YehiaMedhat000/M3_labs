@@ -26,7 +26,7 @@ RM := rm -rf
 -include src/MCAL/DMA/subdir.mk
 -include src/MCAL/AFIO/subdir.mk
 -include src/HAL/TFT/subdir.mk
--include src/HAL/SSD/subdir.mk
+-include src/HAL/SSD_S2P/subdir.mk
 -include src/HAL/S2P/subdir.mk
 -include src/HAL/LEDMAT_S2P/subdir.mk
 -include src/HAL/LEDMAT/subdir.mk
@@ -34,6 +34,7 @@ RM := rm -rf
 -include src/HAL/DAC/subdir.mk
 -include src/APP/TICTACTOE/subdir.mk
 -include src/APP/SNAKE/subdir.mk
+-include src/APP/SCORE/subdir.mk
 -include src/APP/HexParser/subdir.mk
 -include src/APP/GAME/subdir.mk
 -include src/APP/CONNECT4/subdir.mk

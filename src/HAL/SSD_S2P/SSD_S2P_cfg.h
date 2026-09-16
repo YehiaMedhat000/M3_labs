@@ -1,0 +1,6 @@
+#ifndef HAL_SSD_S2P_SSD_S2P_CFG_H_
+#define HAL_SSD_S2P_SSD_S2P_CFG_H_
+
+#define SSD_S2P_DISPLAY_COUNT 2
+
+#endif /* HAL_SSD_S2P_SSD_S2P_CFG_H_ */

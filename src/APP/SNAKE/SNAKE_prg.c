@@ -2,6 +2,7 @@
 #include "../../HAL/TFT/TFT_int.h"
 #include "../../HAL/IR/IR_int.h"
 #include "../../MCAL/TIM/TIM_int.h"
+#include "../SCORE/SCORE_int.h"
 #include "SNAKE_int.h"
 
 #define SNAKE_BOARD_X       0
@@ -241,6 +242,7 @@ static void SNAKE_vMove(void)
         L_s8NextY < 0 || L_s8NextY >= SNAKE_BOARD_ROWS ||
         SNAKE_u8IsSnakeCell((u8)L_s8NextX, (u8)L_s8NextY))
     {
+        SCORE_vResetSnake();
         SNAKE_vResetRound();
         SNAKE_vDrawRound();
         return;
@@ -267,6 +269,7 @@ static void SNAKE_vMove(void)
 
     if (L_u8AteFood)
     {
+        SCORE_vIncrementSnakeItem();
         SNAKE_vPlaceFood();
         SNAKE_vDrawCell(G_u8FoodX, G_u8FoodY, TFT_RED);
     }
@@ -275,6 +278,7 @@ static void SNAKE_vMove(void)
 void SNAKE_vInit(void)
 {
     G_u8ExitFlag = 0;
+    SCORE_vResetSnake();
     SNAKE_vResetRound();
     SNAKE_vDrawRound();
     G_u32LastMoveTime = MTIM_u32GetCounter();
